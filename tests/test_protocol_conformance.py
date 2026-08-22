@@ -3,32 +3,32 @@
 The invariants every indicium DomainAdapter must hold, plus the two this
 adapter exists to satisfy for ASB: it declares ``primary_domain`` (without it a
 proteomics paper classifies as "other"), and it resolves concepts only by exact
-match (a wrong CURIE is worse than no CURIE).
+match or by a published accession grammar (a wrong CURIE is worse than no CURIE).
 """
 
 from __future__ import annotations
 
+import copy
 import re
 from urllib.parse import urlparse
 
 import pytest
-from indicium_adapters import CURRENT_API_VERSION, DomainAdapter
-
-from indicium_adapters_proteomics import ProteomicsAdapter
+from indicium_adapters import CURRENT_API_VERSION, DomainAdapter, SHACLProvider
 
 SNAKE_CASE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
-PREFIX_TERMINATORS = (":", "/", "_", "#")
-
-
-@pytest.fixture
-def adapter() -> ProteomicsAdapter:
-    return ProteomicsAdapter()
+# "=" is included because repository landing pages are query-parameter URLs
+# (ProteomeXchange, MassIVE), where the accession appends after "ID=".
+PREFIX_TERMINATORS = (":", "/", "_", "#", "=")
 
 
 def test_satisfies_the_domain_adapter_protocol(adapter):
     assert isinstance(adapter, DomainAdapter)
     assert adapter.api_version == CURRENT_API_VERSION
+
+
+def test_ships_shacl_shapes(adapter):
+    assert isinstance(adapter, SHACLProvider)
 
 
 def test_declares_primary_domain_so_asb_does_not_classify_as_other(adapter):
@@ -40,6 +40,25 @@ def test_qualifiers_are_snake_case(adapter):
     """Perspicacité's asb:domainQualifier SHACL shape enforces this pattern."""
     bad = [q for q in adapter.qualifiers if not SNAKE_CASE.match(q)]
     assert not bad, f"non-snake_case qualifiers: {bad}"
+
+
+@pytest.mark.parametrize(
+    "qualifier",
+    [
+        "identifies_protein",
+        "identifies_peptide",
+        "matched_to_spectrum",
+        "fdr_controlled_at",
+        "carries_modification",
+        "modified_at",
+        "has_abundance",
+        "quantified_by",
+    ],
+)
+def test_qualifier_vocabulary_covers_the_projected_claim_shapes(adapter, qualifier):
+    """Every qualifier the mzTab and mzIdentML parsers emit must be declared,
+    or a projected claim would carry a qualifier the adapter does not admit."""
+    assert qualifier in adapter.qualifiers
 
 
 def test_vocabulary_terms_are_slugs(adapter):
@@ -69,11 +88,24 @@ def test_extraction_context_names_the_domain_and_its_qualifiers(adapter):
 # --- enrichment ---------------------------------------------------------------
 
 
-def test_enrich_claim_is_pure(adapter):
-    claim = {"subject": "Proteomics", "predicate": "uses", "object": "MaxQuant"}
-    before = dict(claim)
-    adapter.enrich_claim(claim)
-    assert claim == before, "enrich_claim mutated its input"
+def test_enrich_claim_is_pure(adapter, base_claim):
+    before = copy.deepcopy(base_claim)
+    adapter.enrich_claim(base_claim)
+    assert base_claim == before, "enrich_claim mutated its input"
+
+
+def test_uniprot_accession_resolves_with_a_composite_justification(adapter, base_claim):
+    """An accession is matched against a published grammar, not against a label,
+    so the justification must not claim a lexical match."""
+    out = adapter.enrich_claim(base_claim)
+    assert out["ontology_terms"]["subject"] == "uniprot:P02768"
+    assert out["ontology_term_justifications"]["subject"] == "semapv:CompositeMatching"
+
+
+def test_ptm_name_resolves_to_psi_mod(adapter, base_claim):
+    out = adapter.enrich_claim(base_claim)
+    assert out["ontology_terms"]["object"] == "MOD:00696"
+    assert out["ontology_term_justifications"]["object"] == "semapv:LexicalMatching"
 
 
 def test_known_label_resolves_to_an_edam_curie(adapter):
@@ -95,8 +127,8 @@ def test_unresolved_text_is_recorded_not_silently_dropped(adapter):
 
 
 def test_substring_of_a_concept_does_not_resolve(adapter):
-    """'Peptide' must not pick up 'Peptide identification' — a wrong CURIE is
-    worse than no CURIE."""
+    """'Peptide ident' must not pick up 'Peptide identification' — a wrong CURIE
+    is worse than no CURIE."""
     out = adapter.enrich_claim({"subject": "Peptide ident"})
     assert "ontology_terms" not in out
 
@@ -110,4 +142,13 @@ def test_an_already_resolved_slot_is_left_to_its_owner(adapter):
 def test_empty_and_non_string_slots_are_skipped(adapter):
     out = adapter.enrich_claim({"subject": "", "object": None, "qualifier": 42})
     assert "ontology_terms" not in out
+    assert "ontology_terms_unmatched" not in out
+
+
+def test_a_resolved_slot_is_cleared_from_a_stale_unmatched_entry(adapter):
+    """An upstream pass may have recorded a slot as unmatched; resolving it here
+    must retract that record rather than leave the claim contradicting itself."""
+    claim = {"subject": "P02768", "ontology_terms_unmatched": {"subject": "P02768"}}
+    out = adapter.enrich_claim(claim)
+    assert out["ontology_terms"]["subject"] == "uniprot:P02768"
     assert "ontology_terms_unmatched" not in out

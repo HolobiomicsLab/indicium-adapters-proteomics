@@ -4,26 +4,34 @@ build-backend = "hatchling.build"
 
 [project]
 name = "indicium-adapters-proteomics"
-version = "0.1.0"
-description = "Proteomics DomainAdapter for the indicium ecosystem: EDAM-backed concept enrichment and classification vocabulary"
+version = "0.2.1"
+description = "Proteomics-domain DomainAdapter for the indicium ecosystem: ProteomicsAdapter, with UniProt/PSI-MOD/EDAM enrichment and mzTab + mzIdentML claim projections"
 readme = "README.md"
 # 3.11, not 3.12: this must be installable into the AgenticScienceBuilder
 # environment, which is where the classification vocabulary it feeds is consumed.
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
-keywords = ["proteomics", "mass-spectrometry", "EDAM", "indicium", "ontology", "SSSOM"]
+authors = [{name = "Louis-Felix Nothias", email = "louis-felix.nothias@cnrs.fr"}]
+keywords = ["proteomics", "mass-spectrometry", "mzTab", "mzIdentML", "EDAM", "PSI-MOD", "UniProt", "indicium", "domain-adapter", "SSSOM"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-dependencies = ["indicium-adapters>=0.5.0"]
+dependencies = [
+  "indicium-adapters>=0.5.0",
+  "rdflib>=7.0",
+]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.6"]
+# indicium-standard is test-only: tests/test_shapes.py sources the asb: base
+# IRI from the standard rather than hardcoding it.
+dev = ["pytest>=8.0", "pytest-cov>=4", "pyshacl>=0.25", "ruff>=0.6", "indicium-standard>=2.0.0"]
 
 [project.entry-points."indicium.adapters"]
 proteomics = "indicium_adapters_proteomics.proteomics:ProteomicsAdapter"
@@ -31,6 +39,34 @@ proteomics = "indicium_adapters_proteomics.proteomics:ProteomicsAdapter"
 [project.urls]
 Homepage = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
 Repository = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
+Issues = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics/issues"
+Changelog = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics/blob/main/CHANGELOG.md"
+
+# Local-dev resolution for the sibling repos (not published to PyPI).
+# uv-only; stripped from the published wheel. Mirrors indicium-adapters' own
+# [tool.uv.sources].
+[tool.uv.sources]
+indicium-standard = { path = "../indicium", editable = true }
+indicium-adapters = { path = "../indicium-adapters", editable = true }
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/indicium_adapters_proteomics"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.coverage.run]
+omit = [
+    # Maintainer-only: regenerates _psimod_index.json from a PSI-MOD release.
+    # It runs against a 1.8 MB OBO file that is not shipped, so CI cannot
+    # exercise it end to end; its parsing rules are unit-tested directly.
+    "src/indicium_adapters_proteomics/data/build_psimod_index.py",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --strict-markers --cov=indicium_adapters_proteomics --cov-report=term-missing --cov-fail-under=90"

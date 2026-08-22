@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MzIdentML xmlns="http://psidev.info/psi/pi/mzIdentML/1.2"
+           id="synthetic-fixture" version="1.2.0">
+  <SequenceCollection>
+    <DBSequence id="DBSeq_P02768" accession="P02768" searchDatabase_ref="SDB_1"/>
+    <DBSequence id="DBSeq_DECOY" accession="REV_Q9Y6K9" searchDatabase_ref="SDB_1"/>
+    <DBSequence id="DBSeq_UNUSED" accession="P69905" searchDatabase_ref="SDB_1"/>
+    <Peptide id="Pep_1">
+      <PeptideSequence>LVNEVTEFAK</PeptideSequence>
+      <Modification location="3" monoisotopicMassDelta="79.966331">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:21" name="Phospho"/>
+      </Modification>
+    </Peptide>
+    <Peptide id="Pep_2">
+      <PeptideSequence>YICENQDSISSK</PeptideSequence>
+      <Modification location="3" monoisotopicMassDelta="57.021464">
+        <cvParam cvRef="PSI-MOD" accession="MOD:01060" name="S-carboxamidomethyl-L-cysteine"/>
+      </Modification>
+    </Peptide>
+    <PeptideEvidence id="PE_1" dBSequence_ref="DBSeq_P02768" peptide_ref="Pep_1"
+                     isDecoy="false" start="66" end="75" pre="K" post="A"/>
+    <PeptideEvidence id="PE_2" dBSequence_ref="DBSeq_P02768" peptide_ref="Pep_2"
+                     isDecoy="false" start="286" end="297" pre="K" post="L"/>
+    <PeptideEvidence id="PE_3" dBSequence_ref="DBSeq_DECOY" peptide_ref="Pep_1"
+                     isDecoy="true" start="12" end="21" pre="R" post="G"/>
+  </SequenceCollection>
+  <AnalysisProtocolCollection>
+    <SpectrumIdentificationProtocol id="SIP_1" analysisSoftware_ref="AS_1">
+      <Threshold>
+        <cvParam cvRef="PSI-MS" accession="MS:1001364" name="pep:global FDR" value="0.01"/>
+        <cvParam cvRef="PSI-MS" accession="MS:1001494" name="no threshold"/>
+      </Threshold>
+    </SpectrumIdentificationProtocol>
+  </AnalysisProtocolCollection>
+  <AnalysisData>
+    <SpectrumIdentificationList id="SIL_1">
+      <SpectrumIdentificationResult id="SIR_1" spectrumID="index=42" spectraData_ref="SD_1">
+        <SpectrumIdentificationItem id="SII_1_1" chargeState="2" rank="1"
+                                    experimentalMassToCharge="565.79"
+                                    calculatedMassToCharge="565.78"
+                                    peptide_ref="Pep_1" passThreshold="true">
+          <PeptideEvidenceRef peptideEvidence_ref="PE_1"/>
+        </SpectrumIdentificationItem>
+        <SpectrumIdentificationItem id="SII_1_2" chargeState="2" rank="2"
+                                    experimentalMassToCharge="565.79"
+                                    calculatedMassToCharge="565.71"
+                                    peptide_ref="Pep_2" passThreshold="false">
+          <PeptideEvidenceRef peptideEvidence_ref="PE_2"/>
+        </SpectrumIdentificationItem>
+      </SpectrumIdentificationResult>
+    </SpectrumIdentificationList>
+  </AnalysisData>
+</MzIdentML>

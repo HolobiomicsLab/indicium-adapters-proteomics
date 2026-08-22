@@ -1,0 +1,27 @@
+@prefix asb:  <https://w3id.org/asb#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+
+# CURIE-format validation for proteomics claims, at sh:Violation. The prefix
+# alternation is exactly the key set of PROTEOMICS_PREFIXES — test_shapes.py
+# asserts the two stay in step, so adding a prefix without widening this shape
+# fails the build rather than silently rejecting the new CURIEs.
+#
+# Presence of asb:subject and of a qualifier is NOT re-asserted here. indicium's
+# core QualifierPresenceShape already carries it, and a second copy under the
+# same shape IRI would collide with the sibling adapter packages' copies when
+# several adapters are composed into one graph.
+asb:ProteomicsClaimCurieShape
+    a sh:NodeShape ;
+    sh:targetClass asb:Claim ;
+    sh:property [
+        sh:path asb:subject_ontology_term ;
+        sh:pattern "^(MS|MOD|PR|GO|OBI|NCBITaxon|UBERON|uniprot|PXD|PRIDE|MSV|PASS|edam):[A-Za-z0-9_.:+-]+$" ;
+        sh:severity sh:Violation ;
+        sh:message "subject_ontology_term must use a recognized proteomics prefix (MS/MOD/PR/GO/OBI/NCBITaxon/UBERON/uniprot/PXD/PRIDE/MSV/PASS/edam)" ;
+    ] ;
+    sh:property [
+        sh:path asb:object_ontology_term ;
+        sh:pattern "^(MS|MOD|PR|GO|OBI|NCBITaxon|UBERON|uniprot|PXD|PRIDE|MSV|PASS|edam):[A-Za-z0-9_.:+-]+$" ;
+        sh:severity sh:Violation ;
+        sh:message "object_ontology_term must use a recognized proteomics prefix (MS/MOD/PR/GO/OBI/NCBITaxon/UBERON/uniprot/PXD/PRIDE/MSV/PASS/edam)" ;
+    ] .

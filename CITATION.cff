@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: indicium-adapters-proteomics
+message: "If you use this software, please cite it as below."
+type: software
+version: 0.2.0
+date-released: "2026-08-22"
+authors:
+  - family-names: Nothias
+    given-names: Louis-Felix
+    email: louis-felix.nothias@cnrs.fr
+    orcid: "https://orcid.org/0000-0001-6699-8731"
+repository-code: "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
+license: MIT
+keywords:
+  - proteomics
+  - mass-spectrometry
+  - mzTab
+  - mzIdentML
+  - PSI-MOD
+  - UniProt
+  - EDAM
+  - indicium
+abstract: >-
+  Proteomics-domain DomainAdapter for the indicium ecosystem. Provides
+  ProteomicsAdapter, covering protein and peptide identification,
+  quantification, PTM localisation and FDR claims, with enrichment against
+  UniProtKB accessions, the HUPO-PSI PSI-MOD controlled vocabulary and EDAM,
+  plus PSI mzTab and mzIdentML projections into ASB claim dicts.

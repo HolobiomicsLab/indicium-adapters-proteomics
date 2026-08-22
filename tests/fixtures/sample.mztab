@@ -1,0 +1,16 @@
+MTD	mzTab-version	1.0.0
+MTD	mzTab-mode	Complete
+MTD	mzTab-type	Quantification
+MTD	description	Synthetic fixture for the proteomics mzTab projection
+MTD	false_discovery_rate	[MS, MS:1001364, pep:global FDR, 0.01]|[MS, MS:1001214, protein:global FDR, 0.05]
+MTD	software[1]	[MS, MS:1001583, MaxQuant,]
+
+PRH	accession	description	taxid	species	database	database_version	search_engine	best_search_engine_score[1]	modifications	protein_abundance_assay[1]	protein_abundance_stdev_assay[1]
+PRT	P02768	Serum albumin	9606	Homo sapiens	UniProtKB	2026_01	[MS, MS:1001207, Mascot,]	45.6	3-MOD:00696	1.2E6	0.11
+PRT	NOTANACC	Hypothetical protein	9606	Homo sapiens	UniProtKB	2026_01	null	null	null	null	null
+
+PEH	sequence	accession	unique	database	search_engine	modifications	retention_time	charge	mass_to_charge	peptide_abundance_assay[1]
+PEP	LVNEVTEFAK	P02768	1	UniProtKB	[MS, MS:1001207, Mascot,]	null	1234.5	2	565.79	9.9E5
+
+PSH	sequence	PSM_ID	accession	unique	database	search_engine	search_engine_score[1]	modifications	retention_time	charge	exp_mass_to_charge	calc_mass_to_charge	spectra_ref
+PSM	LVNEVTEFAK	1	P02768	1	UniProtKB	[MS, MS:1001207, Mascot,]	38.2	3|5-UNIMOD:35	1234.5	2	565.79	565.78	ms_run[1]:index=42
