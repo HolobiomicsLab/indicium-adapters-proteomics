@@ -131,50 +131,43 @@ class ProteomicsAdapter:
 
     ontology_prefixes: dict[str, str] = PROTEOMICS_PREFIXES
 
-    # Curated, not derived — see the class docstring.
+    # Set by the 2026-08-25 cross-domain vocabulary audit; a term two
+    # sciences both declare cannot tell them apart, so it was dropped.
     subdomains: tuple[str, ...] = (
-        "bottom-up-proteomics",
-        "top-down-proteomics",
-        "targeted-proteomics",
+        "quantitative-proteomics",
+        "interactomics",
         "phosphoproteomics",
         "glycoproteomics",
+        "ptm-proteomics",
+        "proteogenomics",
+        "metaproteomics",
+        "clinical-proteomics",
+        "single-cell-proteomics",
+        "spatial-proteomics",
         "immunopeptidomics",
         "chemoproteomics",
-        "structural-proteomics",
-        "interactomics",
-        "spatial-proteomics",
-        "single-cell-proteomics",
-        "clinical-proteomics",
-        "plasma-proteomics",
-        "metaproteomics",
-        "proteogenomics",
-        "degradomics",
-        "secretomics",
-        "protein-turnover",
-        "thermal-proteome-profiling",
-        "ptm-proteomics",
-        "computational-proteomics",
+        "peptidomics",
     )
 
+    # Set by the 2026-08-25 cross-domain vocabulary audit; a term two
+    # sciences both declare cannot tell them apart, so it was dropped.
     techniques: tuple[str, ...] = (
-        "data-dependent-acquisition",
-        "data-independent-acquisition",
-        "parallel-reaction-monitoring",
-        "selected-reaction-monitoring",
-        "label-free-quantification",
-        "tandem-mass-tag",
-        "itraq",
-        "silac",
-        "lc-msms",
-        "maldi-tof",
-        "ion-mobility-ms",
-        "orbitrap-ms",
-        "cross-linking-ms",
-        "hydrogen-deuterium-exchange-ms",
-        "native-ms",
-        "affinity-purification-ms",
+        "shotgun-proteomics",
+        "top-down-proteomics",
         "de-novo-peptide-sequencing",
-        "spectral-library-search",
+        "peptide-mass-fingerprinting",
+        "two-dimensional-gel-electrophoresis",
+        "affinity-purification-ms",
+        "cross-linking-ms",
+        "native-ms",
+        "hydrogen-deuterium-exchange-ms",
+        "ion-mobility-ms",
+        "limited-proteolysis-ms",
+        "thermal-proteome-profiling",
+        "proximity-labeling",
+        "phosphopeptide-enrichment",
+        "proximity-extension-assay",
+        "protein-interaction-experiment",
     )
 
     # ---- protocol methods --------------------------------------------------
