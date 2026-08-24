@@ -168,6 +168,11 @@ class ProteomicsAdapter:
         "phosphopeptide-enrichment",
         "proximity-extension-assay",
         "protein-interaction-experiment",
+        # Restored: the first audit pass deleted this while resolving the
+        # gene-expression collision, but the two are different terms and no
+        # other science declares it. Without it proteomics had no word for
+        # the thing it measures.
+        "protein-expression",
     )
 
     # ---- protocol methods --------------------------------------------------
