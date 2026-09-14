@@ -24,7 +24,7 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
-  "indicium-adapters>=0.5.0",
+  "indicium-adapters>=0.6.0",
   "rdflib>=7.0",
 ]
 
