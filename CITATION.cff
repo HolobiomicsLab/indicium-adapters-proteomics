@@ -2,13 +2,13 @@ cff-version: 1.2.0
 title: indicium-adapters-proteomics
 message: "If you use this software, please cite it as below."
 type: software
-version: 0.2.0
+version: 0.2.1
 date-released: "2026-08-22"
 authors:
   - family-names: Nothias
     given-names: Louis-Felix
     email: louis-felix.nothias@cnrs.fr
-    orcid: "https://orcid.org/0000-0001-6699-8731"
+    orcid: "https://orcid.org/0000-0001-6711-6719"
 repository-code: "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
 license: MIT
 keywords:
