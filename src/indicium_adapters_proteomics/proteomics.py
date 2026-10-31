@@ -147,6 +147,26 @@ class ProteomicsAdapter:
         "immunopeptidomics",
         "chemoproteomics",
         "peptidomics",
+        # Issue #1: twelve EDAM topics the harvest carries which this adapter
+        # never uttered, so rows tagged only with them were silent. Together
+        # with the two techniques added below they admit 764 further rows of
+        # proteomics_verified.json -- 1,313 -> 2,077 of 2,179, leaving 102 not
+        # admitted where 866 were (39.7% -> 4.7%). The protein-structure family
+        # below reaches past mass-spectrometry proteomics; it is declared here
+        # because no installed adapter speaks for structural biology, and moves
+        # to one the day such an adapter is installed.
+        "protein-interactions",
+        "protein-modifications",
+        "proteins",
+        "protein-folds-and-structural-domains",
+        "protein-folding-stability-and-design",
+        "protein-structural-motifs-and-surfaces",
+        "protein-secondary-structure",
+        "protein-binding-sites",
+        "protein-sites-features-and-motifs",
+        "protein-targeting-and-localisation",
+        "immunoproteins-and-antigens",
+        "membrane-and-lipoproteins",
     )
 
     # Set by the 2026-08-25 cross-domain vocabulary audit; a term two
@@ -173,6 +193,11 @@ class ProteomicsAdapter:
         # other science declares it. Without it proteomics had no word for
         # the thing it measures.
         "protein-expression",
+        # Issue #1, same measurement: two topics naming the work itself rather
+        # than a field. "protein-structure-analysis" carries the structural-
+        # biology caveat recorded on ``subdomains`` above.
+        "proteomics-experiment",
+        "protein-structure-analysis",
     )
 
     # ---- protocol methods --------------------------------------------------
