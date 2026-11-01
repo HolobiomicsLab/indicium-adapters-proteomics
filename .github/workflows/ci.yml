@@ -18,21 +18,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Configure git auth for the private indicium-adapters install
-        env:
-          GH_TOKEN: ${{ secrets.ORG_PAT }}
-        run: |
-          # indicium is public; only indicium-adapters is still private.
-          # Scope the PAT rewrite to that one repo so public clones stay anonymous.
-          # Requires repo secret ORG_PAT with Contents: Read on HolobiomicsLab/indicium-adapters.
-          git config --global url."https://x-access-token:${GH_TOKEN}@github.com/HolobiomicsLab/indicium-adapters".insteadOf "https://github.com/HolobiomicsLab/indicium-adapters"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # indicium and indicium-adapters aren't on PyPI yet; install from git
-          # Pin moves to PyPI once indicium-standard 2.0.0 is published.
+          # indicium and indicium-adapters aren't on PyPI yet; both install from
+          # their public repositories, so no token is needed. The pins move to
+          # PyPI once indicium-standard 2.0.0 and indicium-adapters 0.6.0 are published.
           pip install "indicium-standard @ git+https://github.com/HolobiomicsLab/indicium@500dd828369fd0431154456cb1debfdfcaef779d"
-          pip install git+https://github.com/HolobiomicsLab/indicium-adapters.git@main
+          pip install "indicium-adapters @ git+https://github.com/HolobiomicsLab/indicium-adapters@9e274c2"
           pip install -e .[dev]
       - name: Lint
         run: ruff check .
