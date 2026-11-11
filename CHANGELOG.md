@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+- 2026-11-11: CI and development installs now use the published dependencies
+  from PyPI.
+
 ## [0.2.1] — 2026-08-22
 
 Adversarial review against the mzTab 1.0 specification, the PSI-MS controlled
