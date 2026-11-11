@@ -24,7 +24,7 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
-  "indicium-adapters>=0.5.0",
+  "indicium-adapters>=0.6.0",
   "rdflib>=7.0",
 ]
 
@@ -41,13 +41,6 @@ Homepage = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
 Repository = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics"
 Issues = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics/issues"
 Changelog = "https://github.com/HolobiomicsLab/indicium-adapters-proteomics/blob/main/CHANGELOG.md"
-
-# Local-dev resolution for the sibling repos (not published to PyPI).
-# uv-only; stripped from the published wheel. Mirrors indicium-adapters' own
-# [tool.uv.sources].
-[tool.uv.sources]
-indicium-standard = { path = "../indicium", editable = true }
-indicium-adapters = { path = "../indicium-adapters", editable = true }
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/indicium_adapters_proteomics"]
