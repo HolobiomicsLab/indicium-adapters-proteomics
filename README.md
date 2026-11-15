@@ -73,7 +73,7 @@ the CURIEs that tier produces.
 ## Install
 
 ```bash
-uv pip install -e .
+uv pip install -e ".[dev]"
 ```
 
 The `indicium.adapters` entry point makes it discoverable on install — no
